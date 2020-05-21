@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="app">
+    <!-- <button-counter/>  自闭和不可以实现多个组件同时显示的效果,原因需要再查 -->
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+    <button-counter></button-counter>
+    <blog-post v-for="(post,index) in posts" :key="post.id" :title="post.title"></blog-post>
+  </div>
+  <!-- <script src="./js/vue.js"></script> -->
+  <script src="https://cdn.bootcdn.net/ajax/libs/vue/2.6.11/vue.js"></script>
+  <script>
+    // 定义一个名为 button-counter 的新组件
+    Vue.component('button-counter', {  // 配置对象
+      data: function () {  // 必须是函数
+        return {
+          count: 0
+        }
+      },
+      /* data: {
+        counter:0
+      }, */
+      /* 
+        注意为什么data要用函数function?不能用对象{}
+        每一个组件标签(<button-counter></button-counter>)都是一个组件对象,每个对象都有自己的data对象,而data属性对象的值是读counter的值,如果不报错,那三个组件标签用同一个对象,点某一个按钮,其他按钮也会变,这不是我们需要的效果,我们需要同一个组件的多个标签应该有自己的data
+      */
+      template: '<button v-on:click="count++">You clicked me {{ count }} times.</button>'
+    })
+
+    // 定义文章的组件
+    Vue.component('blog-post',{
+      props:['title'],  // 声明接收属性,属性名是title
+      template:'<div><h1>{{ title }}</h1> <button-counter></button-counter></div>',
+      
+    })
+
+    new Vue({
+      el:'#app',
+      data :{
+        posts:[
+          {id:1,title:'早间新闻'},
+          {id:2,title:'午间休息'},
+          {id:3,title:'晚间联播'}
+        ]
+      }
+    })
+  </script>
+</body>
+
+</html>
